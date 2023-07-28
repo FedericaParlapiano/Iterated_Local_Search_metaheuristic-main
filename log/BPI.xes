@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--  XES version 1849.2016 (IEEE 1849-2016)  -->
+<!--  Created by Fluxicon Disco (fluxicon.com/disco)  -->
+<!--  (c) 2022 by Fluxicon BV, Bomanshof 259, 5611 NS Eindhoven, The Netherlands  -->
+<log xes.version="1849.2016" xmlns="http://www.xes-standard.org" xes.creator="Fluxicon Disco">
+	<extension name="Concept" prefix="concept" uri="http://www.xes-standard.org/concept.xesext"/>
+	<extension name="Lifecycle" prefix="lifecycle" uri="http://www.xes-standard.org/lifecycle.xesext"/>
+	<global scope="trace">
+		<string key="concept:name" value="name"/>
+		<string key="variant" value="string"/>
+		<int key="variant-index" value="0"/>
+	</global>
+	<global scope="event">
+		<string key="concept:name" value="name"/>
+		<string key="lifecycle:transition" value="transition"/>
+		<string key="Activity" value="string"/>
+	</global>
+	<classifier name="Activity" keys="Activity"/>
+	<string key="lifecycle:model" value="standard"/>
+	<string key="creator" value="Fluxicon Disco"/>
+	<string key="library" value="Fluxicon Octane"/>
+	<trace>
+		<string key="concept:name" value="173688"/>
+		<string key="variant" value="Variant 610"/>
+		<int key="variant-index" value="610"/>
+		<string key="creator" value="Fluxicon Disco"/>
+		<event>
+			<string key="concept:name" value="START"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="Activity" value="START"/>
+			<string key="Resource" value="artificial"/>
+		</event>
+		<event>
+			<string key="concept:name" value="ASUBMITTED"/>
+			<string key="lifecycle:transition" value="COMPLETE"/>
+			<string key="Activity" value="ASUBMITTED"/>
+			<string key="Resource" value="112"/>
+		</event>
+		<event>
+			<string key="concept:name" value="APARTLYSUBMITTED"/>
+			<string key="lifecycle:transition" value="COMPLETE"/>
+			<string key="Activity" value="APARTLYSUBMITTED"/>
+			<string key="Resource" value="112"/>
+		</event>
+		<event>
+			<string key="concept:name" value="APREACCEPTED"/>
+			<string key="lifecycle:transition" value="COMPLETE"/>
+			<string key="Activity" value="APREACCEPTED"/>
+			<string key="Resource" value="112"/>
+		</event>
+		<event>
+			<string key="concept:name" value="AACCEPTED"/>
+			<string key="lifecycle:transition" value="COMPLETE"/>
+			<string key="Activity" value="AACCEPTED"/>
+			<string key="Resource" value="10862"/>
+		</event>
+		<event>
+			<string key="concept:name" value="OSELECTED"/>
+			<string key="lifecycle:transition" value="COMPLETE"/>
+			<string key="Activity" value="OSELECTED"/>
+			<string key="Resource" value="10862"/>
+		</event>
+		<event>
+			<string key="concept:name" value="AFINALIZED"/>
+			<string key="lifecycle:transition" value="COMPLETE"/>
+			<string key="Activity" value="AFINALIZED"/>
+			<string key="Resource" value="10862"/>
+		</event>
+		<event>
+			<string key="concept:name" value="OCREATED"/>
+			<string key="lifecycle:transition" value="COMPLETE"/>
+			<string key="Activity" value="OCREATED"/>
+			<string key="Resource" value="10862"/>
+		</event>
+		<event>
+			<string key="concept:name" value="WCompleterenaanvraag"/>
+			<string key="lifecycle:transition" value="COMPLETE"/>
+			<string key="Activity" value="WCompleterenaanvraag"/>
+		</event>
+		<event>
+			<string key="concept:name" value="WNabellenoffertes"/>
+			<string key="lifecycle:transition" value="COMPLETE"/>
+			<string key="Activity" value="WNabellenoffertes"/>
+		</event>
+		<event>
+			<string key="concept:name" value="WNabellenoffertes"/>
+			<string key="lifecycle:transition" value="COMPLETE"/>
+			<string key="Activity" value="WNabellenoffertes"/>
+			<string key="Resource" value="10913"/>
+		</event>
+		<event>
+			<string key="concept:name" value="WNabellenoffertes"/>
+			<string key="lifecycle:transition" value="COMPLETE"/>
+			<string key="Activity" value="WNabellenoffertes"/>
+			<string key="Resource" value="11049"/>
+		</event>
+		<event>
+			<string key="concept:name" value="AREGISTERED"/>
+			<string key="lifecycle:transition" value="COMPLETE"/>
+			<string key="Activity" value="AREGISTERED"/>
+			<string key="Resource" value="10629"/>
+		</event>
+		<event>
+			<string key="concept:name" value="AAPPROVED"/>
+			<string key="lifecycle:transition" value="COMPLETE"/>
+			<string key="Activity" value="AAPPROVED"/>
+			<string key="Resource" value="10629"/>
+		</event>
+		<event>
+			<string key="concept:name" value="OACCEPTED"/>
+			<string key="lifecycle:transition" value="COMPLETE"/>
+			<string key="Activity" value="OACCEPTED"/>
+			<string key="Resource" value="10629"/>
+		</event>
+		<event>
+			<string key="concept:name" value="AACTIVATED"/>
+			<string key="lifecycle:transition" value="COMPLETE"/>
+			<string key="Activity" value="AACTIVATED"/>
+			<string key="Resource" value="10629"/>
+		</event>
+		<event>
+			<string key="concept:name" value="WValiderenaanvraag"/>
+			<string key="lifecycle:transition" value="COMPLETE"/>
+			<string key="Activity" value="WValiderenaanvraag"/>
+			<string key="Resource" value="10629"/>
+		</event>
+		<event>
+			<string key="concept:name" value="END"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="Activity" value="END"/>
+			<string key="Resource" value="artificial"/>
+		</event>
+	</trace>
+</log>
