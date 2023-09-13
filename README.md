@@ -28,5 +28,5 @@ Lo script nel reporitory è quello utilizzato nella fase di sperimetazione. L'es
 La cartella experimentation è dedicata alla sperimentazione. Al suo interno è necessario creare una cartella col nome del log da analizzare e in questa cartella bisogna:
 - inserire i file multiseeds che si vogliono analizzare,
 - creare la sottocartella iterations, in cui inserire i corrispettivi (stessi set di parametri dei file multiseeds) file IterationData,
-- creare tre file con il nome del log seguito da un underscore e dai numeri da 1 a 3, quindi un file per ogni seed (ad esempio andreaHelpdesk_1, andreaHelpdesk_2, andreaHelpdesk_3).
-  
+- creare tre file con il nome del log seguito da un underscore e dai numeri da 1 a 3, quindi un file per ogni seed (ad esempio andreaHelpdesk_1, andreaHelpdesk_2, andreaHelpdesk_3). Creare un foglio chiamato recap in ciascuno di questi tre file.
+Per generare i dati della sperimentazione basterà lanciare il file test_multiseeds.py, avendo l'accortezza di modificare opportunamente le variabili log, parameters e iter.
