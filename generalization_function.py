@@ -92,10 +92,10 @@ def acceptance(V, W, curr_e, struct_move, align_move, fo_curr, best_e, fo_best,
     result = ''
     if fo == fo_curr:
         ris = randint(0, 1)
-        result = 'new one rejected (fo equals)'
+        result = 'new one rejected (fo_testBank2000NoRandomNoise equals)'
     if ris:
-        ris = 2  # ris = 2 take the new one, fo are equal
-        result = 'new one accepted (fo equals)'
+        ris = 2  # ris = 2 take the new one, fo_testBank2000NoRandomNoise are equal
+        result = 'new one accepted (fo_testBank2000NoRandomNoise equals)'
     if fo > fo_curr:
         ris, prob, z = simulatedannealing(fo_curr, fo, T)
         result = 'new one rejected'
@@ -120,7 +120,7 @@ def acceptance(V, W, curr_e, struct_move, align_move, fo_curr, best_e, fo_best,
             list_best.append((V, W))
             best_e.clear()
             best_e += W
-            result = 'new one accepted (new fo best)'
+            result = 'new one accepted (new fo_testBank2000NoRandomNoise best)'
 
     check_eq = False
     if fo == fo_best:
@@ -221,7 +221,7 @@ def simulator_apply(net, im, fm, max_trace_length=1000):
     return len(feasible_elements), 0
 
 
-# calculates the generalization of one ig
+# calculates the generalization_testBank2000NoRandomNoise of one ig
 def generalization(nodes, edges):
     new_nodes = []
     new_edges = []

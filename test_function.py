@@ -7,6 +7,8 @@ from pm4py.visualization.petri_net import visualizer as pn_visualizer
 import graphviz
 import os
 
+from configuration import search_path
+
 
 def division(num, den, dec):
     if den == 0:
@@ -169,12 +171,6 @@ def import_graph_bpi(path):
                         n_out = nodes3[n_out_id]
                         edges3.append((n_in, n_out))
 
-    print("lista di nodi1:", nodes1)
-    print("lista di archi1:", edges1)
-    print("lista di nodi2:", nodes2)
-    print("lista di archi2:", edges2)
-    print("lista di nodi3:", nodes3)
-    print("lista di archi3:", edges3)
     return nodes1, edges1, nodes2, edges2, nodes3, edges3
 
 def draw_graph(nodes, edges, path):
@@ -195,14 +191,7 @@ def draw_graph(nodes, edges, path):
     for e in edges_:
         dot.edge(e[0], e[1], constraint='true')
 
-    # print(nodes_)
-    # print(edges_)
-
-    print(dot.source)
-    print(graphviz.__file__)
-    dot.render('ig/big/' + path + '.gv', view=True)
-
-    return
+    dot.render('ig/graph/' + path + '.gv', view=True)
 
 def draw_petri_net(net_path):
 
@@ -212,30 +201,20 @@ def draw_petri_net(net_path):
     gviz = pn_visualizer.apply(net, initial_marking, final_marking, parameters=parameters)
     pn_visualizer.view(gviz)
 
-def graph_metric(trace_id, list, seed, metric):
-    # funzione usata per graficare i valori della generalizzazione della traccia i-esima ad ogni iterazione
-    # x axis values
-    iterations = []
-    for i in range(0, 50):
-        iterations.append(i)
+'''
+# esempio di come utilizzare le funzioni per la visuazilizzazione degli ig e delle reti di petri
+def visualization():
+    n = 3
+    # visualizzazione di n ig
+    for i in range(0, n):
+            nodes, edges = import_graph("ig/big/" + str(i) + ".g")
+            draw_graph(nodes, edges)
 
-    # plotting the points
-    plt.plot(iterations, list)
-    # naming the x axis
-    plt.xlabel('iteration')
-    # naming the y axis
-    plt.ylabel(metric)
+    bpi = "ig_2k_50it_0g_0.75b_id1"
+    nodes, edges = import_graph("ig/bpi2012/" + bpi + ".g")
+    draw_graph(nodes, edges)
 
-    # giving a title to my graph
-    plt.title('Trace ' + str(trace_id) + ' Seed ' + str(seed))
-
-    if metric == 'generalization':
-        plt.yticks(numpy.arange(0, 100000, 10000.0))
-    if metric == 'fo':
-        plt.yticks(numpy.arange(0, 100000, 10000.0))
-
-    plt.savefig('test\\' + metric + '\\trace' + str(trace_id) + 'seed' + str(seed) + '.png')
-    # function to show the plot
-    #plt.show()
-
-
+    # visualizzazione rete di petri
+    npath, lpath = search_path()
+    draw_petri_net("log/" + npath) 
+'''

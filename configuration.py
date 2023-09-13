@@ -16,14 +16,14 @@ def parameters():
 
 
 def search_path():
-    # npath = "andreaHelpdesk_petriNet.pnml"
-    # lpath = "andreaHelpdesk.xes"
+    npath = "andreaHelpdesk_petriNet.pnml"
+    lpath = "andreaHelpdesk.xes"
 
     # npath = "BPI2017Denied_petriNet.pnml"
     # lpath = "BPI2017Denied.xes"
 
-    npath = "testBank2000NoRandomNoise_petriNet.pnml"
-    lpath = "testBank2000NoRandomNoise.xes"
+    # npath = "testBank2000NoRandomNoise_petriNet.pnml"
+    # lpath = "testBank2000NoRandomNoise.xes"
 
     # npath = "BPI2012_SE_08.pnml"
     # lpath = "BPI.xes"

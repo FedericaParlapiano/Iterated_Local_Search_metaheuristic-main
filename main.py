@@ -97,6 +97,9 @@ def metaeuristica(T, iterations, alpha, k, nodes, edges, model_dep, gen_max, ali
         sa_count, curr_e, fo_curr, best_e, fo_best, list_best, c_timeout, c_no_pt, l = \
             acceptance(nodes, edges, curr_e, fo_move, al_move, fo_curr, best_e, fo_best,
                        list_best, T, gen_max, beta, gamma, c_timeout, c_no_pt, sa_count)
+        print(str(best_e))
+        print(str(curr_e))
+        print(str(fo_best))
         # l = list of data of interest that it saves on file
         l.insert(0, s)
         l.insert(1, i)
@@ -113,7 +116,8 @@ def metaeuristica(T, iterations, alpha, k, nodes, edges, model_dep, gen_max, ali
         move, g_best, g_init, r_best, r_init, fo1, fo2 = '-', '-', '-', '-', '-', 0, 0
     else:  # make calculation with the best solution found
         move = count_move(best_e, iedges)
-        al_move = count_move(edges, aligned_ig)
+        move -= k*2
+        al_move = count_move(best_e, aligned_ig)
         g_best, r_best = generalization(nodes, best_e)
         g_init, r_init = generalization(nodes, meta_init)
         fo1, fo2, na, l = objective_function(nodes, best_e, move, al_move, gen_max, beta, gamma, len(curr_e))
@@ -125,28 +129,9 @@ def metaeuristica(T, iterations, alpha, k, nodes, edges, model_dep, gen_max, ali
     return tuple(final_data), best_e, list_best
 
 
-def visualization():
-    # visualizzazione di un ig
-    for i in range(0, 2):
-            nodes, edges = import_graph("ig/big/" + str(i) + ".g")
-            draw_graph(nodes, edges)
-
-    bpi = "ig_2k_50it_0g_0.75b_id1"
-    nodes, edges = import_graph("ig/bpi2012/" + bpi + ".g")
-    draw_graph(nodes, edges)
-
-    # visualizzazione rete di petri
-    npath, lpath = search_path()
-    draw_petri_net("log/" + npath)
-
-
-
-
 if __name__ == '__main__':
 
-    #visualization()
-
-    seeds = [1, 2, 3]
+    seeds = [1]
     all_seed_df = []
     matrix = []
     t_init = time.time()
@@ -164,7 +149,7 @@ if __name__ == '__main__':
     set_parameters = "_a" + str(alpha) + "_b" + str(beta) + "_g" + str(gamma) + "_T" + str(T) + "_iter" + str(
         iterations) + "_k" + str(k) + "_" + lpath.replace('.xes', '')
     file_print("IterationData" + set_parameters + ".csv",
-               ["seed", "trace id", "fo curr", "fo now", "fo1", "fo2", "result", "gen", "str_move", "alig_move",
+               ["seed", "trace id", "fo_testBank2000NoRandomNoise curr", "fo_testBank2000NoRandomNoise now", "fo1", "fo2", "result", "gen", "str_move", "alig_move",
                 "time"], "w")
     # ritorna un oggetto di tip petri net, l'initial marking e il final marking della rete
     net, im, fm = pnml_importer.apply("log\\" + npath)
@@ -244,6 +229,8 @@ if __name__ == '__main__':
 
     t1 = time.time()
 
+    times_big = []
+
     for s in seeds:
         print()
         print("**********Seed: ", s)
@@ -272,6 +259,7 @@ if __name__ == '__main__':
                 try:
                     big_best = big_algorithm(nodes, ed_init, D, I, cr)
                     t_big = round(time.time() - t, 2)
+                    times_big.append([i, t_big])
                     sound, inodes, fnodes = soundness(nodes, big_best)
                     diff_big = count_move(big_best, aligned_igs[i])
 
@@ -286,45 +274,53 @@ if __name__ == '__main__':
                 except Exception as e:
                     print("Errore con BIG: ", e)
                     t_big = round(time.time() - t, 2)
+                    times_big.append([i, t_big])
                     big_best = '-'
                     g_big, r_big, big_move = '-', '-', '-'
                     diff_big = len(aligned_igs[i])
-            print(i)
-            # ---- take bigs ig from files
-            big_nodes, big_best = import_graph("ig/big/" + str(i) + ".g")
-            diff_big = count_move(big_best, aligned_igs[i])
-            big_move = count_move(big_best, ed_init)
-            g_big, r_big = generalization(nodes, big_best)
-            # ----
 
-            edges = ed_init.copy()
-            l_file, meta_best, meta_list = metaeuristica(T, iterations, alpha, k, nodes, edges, model_dep, gen_max,
-                                                         aligned_igs[i])
-            l_file = list(l_file)
-            l_file.insert(0, i)
-            diff = count_move(meta_best, aligned_igs[i])
-            l_file.append(diff)
-            print("Differenza fra ig dell'alignment e meta best: ", str(diff))
+                time_df = pd.DataFrame(times_big, columns=["trace_id", "time"])
+                with pd.ExcelWriter("output\\big_times_andreaHelpdesk.xlsx", mode='a',
+                                    if_sheet_exists="replace") as writer:
+                    time_df.to_excel(writer, sheet_name='big_times', index=False)
 
-            l_file += [len(big_best), g_big, big_move, diff_big]
-            # l_file += [0, 0, 0, 0, 0, 0, 0]
-            # ******************************************
+        # ---- take bigs ig from files
+        big_nodes, big_best = import_graph("ig/big/" + str(i) + ".g")
+        diff_big = count_move(big_best, aligned_igs[i])
+        big_move = count_move(big_best, ed_init)
+        g_big, r_big = generalization(nodes, big_best)
+        # ----
 
-            # ---- PRINT BESTS META TO FILE ---
-            ig_path = 'ig\\bpi2012\\ig_' + exe_name + '_id' + str(i) + '.g'
-            if s == 1:
-                file_print(ig_path, "Parameter: " + exe_name, 'w')
-            file_print(ig_path, "*** Seed: " + str(s) + " ***")
-            save_graph(ig_path, nodes, meta_best)
-            #for ig in meta_list:
-                #save_graph(ig_path, nodes, ig[1])
-            # -----
+        edges = ed_init.copy()
+        l_file, meta_best, meta_list = metaeuristica(T, iterations, alpha, k, nodes, edges, model_dep, gen_max,
+                                                     aligned_igs[i])
+        l_file = list(l_file)
+        l_file.insert(0, i)
+        diff = count_move(meta_best, aligned_igs[i])
+        l_file.append(diff)
+        print("Differenza fra ig dell'alignment e meta best: ", str(diff))
 
-            i += 1
-            l_file.insert(0, s)
-            data_seed.append(l_file)
+        l_file += [len(big_best), g_big, big_move, diff_big]
+        # l_file += [0, 0, 0, 0, 0, 0, 0]
+        # ******************************************
+
+        # ---- PRINT BESTS META TO FILE ---
+        ig_path = 'ig\\bpi2012\\ig_' + exe_name + '_id' + str(i) + '.g'
+        if s == 1:
+            file_print(ig_path, "Parameter: " + exe_name, 'w')
+        file_print(ig_path, "*** Seed: " + str(s) + " ***")
+        save_graph(ig_path, nodes, meta_best)
+        #for ig in meta_list:
+            #save_graph(ig_path, nodes, ig[1])
+        # -----
+
+        i += 1
+        l_file.insert(0, s)
+        data_seed.append(l_file)
 
         matrix += data_seed
+
+        print("matrix" + str(matrix))
 
         # total dataframe for every execution seed
         df = pd.DataFrame(matrix, columns=index_file)
