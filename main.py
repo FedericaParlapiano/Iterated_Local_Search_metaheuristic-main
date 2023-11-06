@@ -17,12 +17,10 @@ from configuration import search_path, parameters
 from generalization_function import acceptance, generalization, count_move, objective_function
 from instantgraph import findCausalRelationships, ExtractInstanceGraph, findDependencyNet
 from move_function import admissible_edges, local_search, repair_sound
-from test_function import file_print, save_graph, import_graph, draw_petri_net, draw_graph, \
-    graph_metric
+from test_function import file_print, save_graph, import_graph, draw_petri_net, draw_graph
 
 
 def metaeuristica(T, iterations, alpha, k, nodes, edges, model_dep, gen_max, aligned_ig):
-
     # Initialize variables
     fo_best = 100000
     fo_curr = 100000
@@ -108,15 +106,13 @@ def metaeuristica(T, iterations, alpha, k, nodes, edges, model_dep, gen_max, ali
 
         file_print("IterationData" + set_parameters + ".csv", l)
 
-
     t_meta = round(time.time() - t, 2)
-
 
     if never_sound:  # a valid solution was never found
         move, g_best, g_init, r_best, r_init, fo1, fo2 = '-', '-', '-', '-', '-', 0, 0
     else:  # make calculation with the best solution found
         move = count_move(best_e, iedges)
-        move -= k*2
+        move -= k * 2
         al_move = count_move(best_e, aligned_ig)
         g_best, r_best = generalization(nodes, best_e)
         g_init, r_init = generalization(nodes, meta_init)
@@ -131,14 +127,14 @@ def metaeuristica(T, iterations, alpha, k, nodes, edges, model_dep, gen_max, ali
 
 if __name__ == '__main__':
 
-    seeds = [1]
+    seeds = [1, 2, 3]
     all_seed_df = []
     matrix = []
     t_init = time.time()
     npath, lpath = search_path()
     tot, T, iterations, alpha, k, beta, gamma = parameters()
 
-    #BIG("log/" + npath, "log/" + lpath)
+    # BIG("log/" + npath, "log/" + lpath)
 
     # ******* FILE PRINT ********
     index_file = ["seed", "trace id", "nodes", "meta edges", "time meta", "gen meta init", "nopt/timeout",
@@ -149,7 +145,8 @@ if __name__ == '__main__':
     set_parameters = "_a" + str(alpha) + "_b" + str(beta) + "_g" + str(gamma) + "_T" + str(T) + "_iter" + str(
         iterations) + "_k" + str(k) + "_" + lpath.replace('.xes', '')
     file_print("IterationData" + set_parameters + ".csv",
-               ["seed", "trace id", "fo_testBank2000NoRandomNoise curr", "fo_testBank2000NoRandomNoise now", "fo1", "fo2", "result", "gen", "str_move", "alig_move",
+               ["seed", "trace id", "fo_testBank2000NoRandomNoise curr", "fo_testBank2000NoRandomNoise now", "fo1",
+                "fo2", "result", "gen", "str_move", "alig_move",
                 "time"], "w")
     # ritorna un oggetto di tip petri net, l'initial marking e il final marking della rete
     net, im, fm = pnml_importer.apply("log\\" + npath)
@@ -183,7 +180,6 @@ if __name__ == '__main__':
 
     # ritorna un dizionario in cui la chiave è un evento e il valore associato alla chiave è la lista di eventi da cui l'evento chaive dipende (es. '1': ['START', '3'])
     model_dep = findDependencyNet(cr, net)
-
 
     # ritorna una lista  in cui si ha un elemnto per ognuna delle tracce considerate
     # ogni elemento della lista è un dizionario che contine ea sua volta una serie di elementi relativi all'operazione di conformance checking
@@ -284,39 +280,39 @@ if __name__ == '__main__':
                                     if_sheet_exists="replace") as writer:
                     time_df.to_excel(writer, sheet_name='big_times', index=False)
 
-        # ---- take bigs ig from files
-        big_nodes, big_best = import_graph("ig/big/" + str(i) + ".g")
-        diff_big = count_move(big_best, aligned_igs[i])
-        big_move = count_move(big_best, ed_init)
-        g_big, r_big = generalization(nodes, big_best)
-        # ----
+            # ---- take bigs ig from files
+            big_nodes, big_best = import_graph("ig/big/" + str(i) + ".g")
+            diff_big = count_move(big_best, aligned_igs[i])
+            big_move = count_move(big_best, ed_init)
+            g_big, r_big = generalization(nodes, big_best)
+            # ----
 
-        edges = ed_init.copy()
-        l_file, meta_best, meta_list = metaeuristica(T, iterations, alpha, k, nodes, edges, model_dep, gen_max,
-                                                     aligned_igs[i])
-        l_file = list(l_file)
-        l_file.insert(0, i)
-        diff = count_move(meta_best, aligned_igs[i])
-        l_file.append(diff)
-        print("Differenza fra ig dell'alignment e meta best: ", str(diff))
+            edges = ed_init.copy()
+            l_file, meta_best, meta_list = metaeuristica(T, iterations, alpha, k, nodes, edges, model_dep, gen_max,
+                                                         aligned_igs[i])
+            l_file = list(l_file)
+            l_file.insert(0, i)
+            diff = count_move(meta_best, aligned_igs[i])
+            l_file.append(diff)
+            print("Differenza fra ig dell'alignment e meta best: ", str(diff))
 
-        l_file += [len(big_best), g_big, big_move, diff_big]
-        # l_file += [0, 0, 0, 0, 0, 0, 0]
-        # ******************************************
+            l_file += [len(big_best), g_big, big_move, diff_big]
+            # l_file += [0, 0, 0, 0, 0, 0, 0]
+            # ******************************************
 
-        # ---- PRINT BESTS META TO FILE ---
-        ig_path = 'ig\\bpi2012\\ig_' + exe_name + '_id' + str(i) + '.g'
-        if s == 1:
-            file_print(ig_path, "Parameter: " + exe_name, 'w')
-        file_print(ig_path, "*** Seed: " + str(s) + " ***")
-        save_graph(ig_path, nodes, meta_best)
-        #for ig in meta_list:
-            #save_graph(ig_path, nodes, ig[1])
-        # -----
+            # ---- PRINT BESTS META TO FILE ---
+            ig_path = 'ig\\bpi2012\\ig_' + exe_name + '_id' + str(i) + '.g'
+            if s == 1:
+                file_print(ig_path, "Parameter: " + exe_name, 'w')
+            file_print(ig_path, "*** Seed: " + str(s) + " ***")
+            save_graph(ig_path, nodes, meta_best)
+            # for ig in meta_list:
+            # save_graph(ig_path, nodes, ig[1])
+            # -----
 
-        i += 1
-        l_file.insert(0, s)
-        data_seed.append(l_file)
+            i += 1
+            l_file.insert(0, s)
+            data_seed.append(l_file)
 
         matrix += data_seed
 
@@ -337,7 +333,8 @@ if __name__ == '__main__':
         df_avg = pd.DataFrame(avg, index=trace_ids)
         df_avg.drop('trace id', axis=1, inplace=True)
 
-        with pd.ExcelWriter("output\\avg_seeds" + set_parameters + ".xlsx", mode='a', if_sheet_exists="replace") as writer:
+        with pd.ExcelWriter("output\\avg_seeds" + set_parameters + ".xlsx", mode='a',
+                            if_sheet_exists="replace") as writer:
             df_avg.to_excel(writer, sheet_name='avg' + exe_name)
 
         with pd.ExcelWriter("output\\multi_seeds" + set_parameters + ".xlsx") as writer:
